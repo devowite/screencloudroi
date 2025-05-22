@@ -1,18 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-            <style></style>
-        </head>
-        <body>
-            
-
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScreenCloud ROI Calculator V6</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand-dark-start: #3a3a3a; /* Gradient start */
@@ -52,22 +46,32 @@
             max-width: 1150px; /* Increased for side-by-side layout */
             margin-top: 20px;
             margin-bottom: 20px;
+            position: relative; /* For logo positioning */
         }
+
+
+.sc-logo img {
+    display: block; /* Removes any potential extra space below the image */
+    width: 100%;   /* Makes the image fill the width of the <a> tag */
+    height: auto;  /* Maintains the image's aspect ratio */
+    border: none;  /* Ensures no border (replaces border="0") */
+}
 
         h1 {
             color: var(--brand-yellow);
             text-align: center;
-            font-size: 2.2em; 
+            font-size: 2.2em;
             line-height: 1.2;
             margin-bottom: 30px; /* Increased margin after title block */
+            margin-top: 5px; /* Adjusted slightly if logo takes vertical space, check alignment */
             font-weight: 700;
         }
 
         h1 .subtitle {
-            display: block; 
-            font-size: 0.65em; 
+            display: block;
+            font-size: 0.65em;
             font-weight: 600;
-            color: var(--text-secondary); 
+            color: var(--text-secondary);
             margin-top: 5px;
         }
 
@@ -83,7 +87,7 @@
             min-width: 0; /* Important for flex items to shrink properly */
             margin-bottom: 0; /* Removed bottom margin from individual sections */
         }
-        
+
         .input-section > h2:first-child,
         .output-section > h2:first-child {
             margin-top: 0; /* Remove top margin if h2 is first child of section */
@@ -118,21 +122,20 @@
         }
 
         .form-group input[type="number"] {
-    padding: 12px 14px;
-    background-color: var(--input-bg);
-    border: 1px solid var(--input-border);
-    border-radius: 6px;
-    text-align: center;
-    color: var(--text-primary);
-    font-size: 1em;
-    font-family: var(--font-main);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    width: 200px;         /* Explicitly set the width */
-    margin-left: auto;    /* For centering */
-    margin-right: auto;   /* For centering */
-    box-sizing: border-box; /* Include padding and border in the element's total width */
-    /* You can remove any max-width property here if it's no longer needed or conflicts */
-}
+            padding: 12px 14px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            text-align: center;
+            color: var(--text-primary);
+            font-size: 1em;
+            font-family: var(--font-main);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
 
         .form-group input[type="number"]:focus {
             outline: none;
@@ -222,9 +225,9 @@
 
         .output-metric {
             background-color: var(--input-bg);
-            padding: 15px; /* Slightly reduced padding for compactness */
+            padding: 15px;
             border-radius: 8px;
-            margin-bottom: 15px; /* Slightly reduced */
+            margin-bottom: 15px;
             border-left: 5px solid var(--brand-yellow);
             transition: transform 0.2s ease-out;
         }
@@ -234,26 +237,29 @@
 
         .output-metric p {
             margin: 0;
-            font-size: 0.85em; /* Slightly smaller for compactness */
+            font-size: 0.85em;
             color: var(--text-secondary);
-            margin-bottom: 5px; /* Slightly reduced */
+            margin-bottom: 5px;
         }
 
-        .output-metric span { 
+        .output-metric span {
             display: block;
-            font-size: 1.5em; /* Slightly smaller */
+            font-size: 1.5em;
             font-weight: 700;
             color: var(--brand-white);
         }
+        .print-only-outputs-header {
+    display: none;
+}
 
         .output-metric.total-benefit span {
             color: var(--brand-yellow);
-            font-size: 1.7em; /* Slightly smaller */
+            font-size: 1.7em;
         }
 
         .turnover-reduction-detail {
-            margin-top: 6px; /* Slightly reduced */
-            font-size: 0.7em; /* Slightly smaller */
+            margin-top: 6px;
+            font-size: 0.7em;
             color: var(--green-accent);
             display: flex;
             align-items: center;
@@ -263,19 +269,19 @@
             margin-right: 5px;
             color: var(--green-accent);
             font-weight: 3500;
-            font-size: 0.6em; /* Slightly smaller */
+            font-size: 0.6em;
         }
 
         .video-link-container {
-            margin-top: 8px; /* Slightly reduced */
-            font-size: 0.8em; /* Slightly smaller */
+            margin-top: 8px;
+            font-size: 0.8em;
         }
         .video-testimonial-link {
             color: var(--brand-yellow);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            padding: 5px 8px; 
+            padding: 5px 8px;
             border-radius: 4px;
             background-color: rgba(255, 255, 255, 0.05);
             transition: background-color 0.3s ease, text-decoration 0.3s ease;
@@ -283,14 +289,14 @@
         .video-testimonial-link:hover,
         .video-testimonial-link:focus {
             background-color: rgba(255, 255, 255, 0.1);
-            text-decoration: none; 
+            text-decoration: none;
             outline: none;
         }
         .video-testimonial-link svg {
-            width: 14px; /* Slightly smaller */
+            width: 14px;
             height: 14px;
             margin-right: 6px;
-            fill: currentColor; 
+            fill: currentColor;
         }
 
         .form-group {
@@ -336,51 +342,213 @@
             opacity: 1;
         }
 
+        .lock-in-link-container {
+            display: flex; /* For aligning buttons */
+            gap: 10px; /* Space between buttons */
+            align-items: center; /* Vertical alignment */
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            margin-top: 15px; /* Adjusted from inline style */
+        }
+
+        .lock-in-benefits-link {
+            display: inline-block;
+            padding: 10px 18px;
+            background-color: var(--brand-yellow);
+            color: var(--brand-medium-dark);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: 1px solid var(--brand-yellow);
+        }
+
+        .lock-in-benefits-link:hover,
+        .lock-in-benefits-link:focus {
+            background-color: #e6bb00;
+            color: var(--brand-medium-dark);
+            text-decoration: none;
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .share-results-button {
+            display: inline-block;
+            padding: 10px 18px;
+            background-color: transparent;
+            color: var(--brand-yellow);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            border: 1px solid var(--brand-yellow);
+            cursor: pointer;
+        }
+
+        .share-results-button:hover,
+        .share-results-button:focus {
+            background-color: rgba(255, 209, 0, 0.1); /* Slight yellow tint on hover */
+            color: var(--brand-yellow);
+            text-decoration: none;
+            transform: translateY(-1px);
+            outline: none;
+        }
+        .header-group {
+    display: flex;         /* Aligns logo and H1 in a row */
+    align-items: center;   /* Vertically centers logo and H1 with each other */
+    width: fit-content;    /* Makes the group only as wide as its content */
+    margin-left: auto;     /* Centers the group */
+    margin-right: auto;    /* Centers the group */
+    margin-bottom: 30px;   /* Spacing below the header (from original H1) */
+    /* If you had a specific margin-top on H1 you want to preserve for the group, add it here */
+    /* e.g., margin-top: 5px; */
+}
+
+.header-logo {
+    width: 50px;           /* Adjust size as needed - this is smaller */
+    height: auto;
+    margin-right: 15px;    /* Space between logo and the title text */
+    display: block;
+}
+
+/* Adjust H1 when it's inside the new header-group */
+.header-group > h1 {
+    text-align: left;      /* Title/subtitle text now aligns to the left (next to logo) */
+    margin: 0;             /* Remove H1's default margins for better flex control */
+    /* Font size, color, weight, line-height will be inherited from general h1 styles */
+}
+
+
         /* Responsive stacking for smaller screens */
-        @media (max-width: 992px) { /* Adjusted breakpoint for better fit */
+        @media (max-width: 992px) {
             .calculator-content-wrapper {
                 flex-direction: column;
-                gap: 30px; 
+                gap: 30px;
             }
             .input-section,
             .output-section {
-                flex-basis: auto; 
+                flex-basis: auto;
                 width: 100%;
             }
             .input-section > h2:first-child,
             .output-section > h2:first-child {
-                margin-top: 20px; /* Add some top margin back when stacked */
+                margin-top: 20px;
             }
-             .output-section > h2:first-child { /* First h2 in output when stacked */
-                 margin-top: 0; 
+             .output-section > h2:first-child {
+                 margin-top: 0;
              }
             .roi-calculator {
-                max-width: 680px; /* Revert to smaller max-width for stacked view */
+                max-width: 680px;
             }
             .form-group input[type="number"] {
-                 max-width: 100%; /* Allow inputs to be wider on mobile if needed */
+                 max-width: 100%;
             }
+             h1 {
+                 margin-top: 45px; /* Give more space for logo when title might wrap */
+             }
         }
          @media (max-width: 480px) {
              .roi-calculator {
                  padding: 20px 15px;
              }
-             h1 { font-size: 1.8em; }
+             h1 {
+                font-size: 1.8em;
+                margin-top: 30px; /* More space for logo */
+             }
              h1 .subtitle { font-size: 0.6em; }
              h2 { font-size: 1.3em; }
              .output-metric span { font-size: 1.3em; }
              .output-metric.total-benefit span { font-size: 1.5em; }
+             .lock-in-link-container {
+                 justify-content: center; /* Center buttons on small screens if they wrap */
+             }
          }
 
+        @media print {
+    body {
+        background: #fff !important;
+        color: #000 !important;
+        margin: 0;
+        padding: 0;
+    }
+    .roi-calculator {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important; /* You can set to 'none' if no border is preferred */
+        margin: 20px !important;
+        padding: 15px !important;
+        max-width: 100% !important;
+        width: auto !important;
+    }
+
+    /* Hide these elements in print view */
+    .input-section, /* <<< HIDES THE ENTIRE INPUTS SECTION */
+    .lock-in-benefits-link,
+    .share-results-button,
+    .slider-wrapper,
+    .info-icon-wrapper,
+    .video-testimonial-link {
+        display: none !important;
+    }
+
+    /* Outputs header adjustments for print */
+    .screen-only-outputs-header {
+        display: none !important; /* Hide the original "Outputs" H2 */
+    }
+    .print-only-outputs-header {
+        display: block !important; /* Show the "Our ROI" H2 */
+        margin-top: 0 !important; /* Ensure it aligns like the first H2 in the section */
+        /* It will inherit other H2 styles (color, font-size, border, etc.)
+           but you can override them here if needed for print. */
+    }
+
+    /* Text color adjustments for readability in print */
+    h1, /* This H1 (main title) will be hidden if .header-group is hidden. Keeping for safety */
+    h2, /* This will style the visible "Our ROI" header */
+    .output-metric p,
+    .output-metric span,
+    .form-group label, /* Labels in input-section will be hidden with the section */
+    #slider-value-display { /* slider-value-display is part of .slider-wrapper, will be hidden */
+        color: #333 !important;
+    }
+
+    .print-only-outputs-header { /* Specifically style the "Our ROI" header if needed */
+        color: var(--brand-yellow) !important; /* Keep brand color for this header */
+    }
+
+    h1 .subtitle { /* Subtitle of main H1 will be hidden if .header-group is hidden */
+            color: #555 !important;
+    }
+    .output-metric.total-benefit span {
+            color: var(--brand-yellow) !important; /* Keep brand color for total benefit */
+    }
+
+    /* Backgrounds and borders for print */
+    .output-metric {
+        background-color: #f9f9f9 !important;
+        border-left-color: var(--brand-yellow) !important;
+    }
+    .form-group input[type="number"] { /* Inputs will be hidden with .input-section */
+        background-color: #fff !important;
+        border: 1px solid #bbb !important;
+        color: #000 !important;
+    }
+    .turnover-reduction-detail, .turnover-reduction-detail .arrow {
+        color: var(--green-accent) !important;
+    }
+}
+
     </style>
-
-
+</head>
+<body>
 
     <div class="roi-calculator">
-        <h1>
+    <div class="header-group">
+        <img src="https://i.ibb.co/7xhtjvRN/Symbol-For-Dark-Theme-2x.png" alt="ScreenCloud Logo" class="header-logo"> <h1>
             ScreenCloud
-            <span class="subtitle">ROI Calculator</span>
+            <span class="subtitle">Value Calculator</span>
         </h1>
+    </div>
 
         <div class="calculator-content-wrapper">
             <div class="input-section">
@@ -428,32 +596,33 @@
             </div>
 
             <div class="output-section">
-                <h2>Outputs</h2>
+                <h2 class="screen-only-outputs-header">Outputs</h2>
+                <h2 class="print-only-outputs-header">Our ROI</h2>
                 <div class="slider-wrapper">
-                    <label class="slider-main-label" for="estimateSlider">Adjust Estimate Impact:</label>
+                    <label class="slider-main-label" for="estimateSlider">Adjust Estimated Impact:</label>
                     <div class="slider-container">
                         <span class="slider-end-labels conservative">Conservative</span>
                         <input type="range" id="estimateSlider" min="-12.5" max="12.5" step="0.1" value="0">
                         <span class="slider-end-labels aggressive">Aggressive</span>
                     </div>
-
+                  
                 </div>
 
                 <div class="output-metric">
                     <p>New Estimated Turnover Rate</p>
-                    <span id="outputNewTurnoverRate">17.10%</span>
-                    <div class="turnover-reduction-detail" id="turnoverReductionDetailContainer" style="display: flex;">
+                    <span id="outputNewTurnoverRate">0%</span>
+                    <div class="turnover-reduction-detail" id="turnoverReductionDetailContainer" style="display: none;">
                         <span class="arrow">↓</span>
-                        <span id="turnoverPercentageDecline">14.5% decline</span>
+                        <span id="turnoverPercentageDecline">0% decline</span>
                     </div>
                 </div>
                 <div class="output-metric">
                     <p>Turnover Reduction Savings</p>
-                    <span id="outputTurnoverReductionSavings">$40,600</span>
+                    <span id="outputTurnoverReductionSavings">$0</span>
                 </div>
                 <div class="output-metric">
                     <p>Value of Time Saved (Improved Communication)</p>
-                    <span id="outputValueOfTimeSaved">$226,042</span>
+                    <span id="outputValueOfTimeSaved">$0</span>
                     <div class="video-link-container">
                         <a href="https://youtu.be/rQRnibgEyOs?feature=shared" target="_blank" rel="noopener noreferrer" class="video-testimonial-link">
                             <svg viewBox="0 0 24 24" width="16px" height="16px"><path d="M8 5v14l11-7z"></path></svg>
@@ -463,7 +632,13 @@
                 </div>
                 <div class="output-metric total-benefit">
                     <p>Total Estimated Annual Benefit</p>
-                    <span id="outputTotalAnnualBenefit">$266,642</span>
+                    <span id="outputTotalAnnualBenefit">$0</span>
+                    <div class="lock-in-link-container"> 
+                        <a href="https://screencloud.com/demo-request" target="_blank" rel="noopener noreferrer" class="lock-in-benefits-link">
+                            Lock in these benefits
+                        </a>
+                        <button type="button" id="shareResultsBtn" class="share-results-button">Share results</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -485,6 +660,8 @@
             const outputTurnoverReductionSavings = document.getElementById('outputTurnoverReductionSavings');
             const outputValueOfTimeSaved = document.getElementById('outputValueOfTimeSaved');
             const outputTotalAnnualBenefit = document.getElementById('outputTotalAnnualBenefit');
+
+            const shareResultsBtn = document.getElementById('shareResultsBtn');
 
             function formatCurrency(value) {
                 return value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
@@ -532,7 +709,7 @@
                 // Using 31 minutes and 265 days as per your provided code for this iteration
                 const totalMinutesSavedPerEmployeeYear = 31 * 265;
                 const totalMinutesSavedAllFrontlineYearBase = totalMinutesSavedPerEmployeeYear * frontlineEmployeesCount;
-                const annualWorkHours = 265 * 8; 
+                const annualWorkHours = 265 * 8;
                 const hourlyWage = annualWorkHours > 0 ? avgAnnualWage / annualWorkHours : 0;
 
                 const baseValueOfTimeSaved = (totalMinutesSavedAllFrontlineYearBase / 60) * hourlyWage;
@@ -543,7 +720,7 @@
                 outputNewTurnoverRate.textContent = formatPercentage(displayedNewTurnoverRate);
 
                 if (originalTurnoverRateInputVal > 0 && reductionInPP > 0.0001) { // Check if there's a meaningful reduction
-                    turnoverPercentageDeclineEl.textContent = formatPercentage(currentTotalTurnoverReductionPercentage * 100, 1) + " decline";
+                    turnoverPercentageDeclineEl.textContent = formatPercentage(currentTotalTurnoverReductionPercentage * 100, 1) + " improvement";
                     turnoverReductionDetailContainer.style.display = 'flex';
                 } else {
                     turnoverReductionDetailContainer.style.display = 'none';
@@ -559,13 +736,15 @@
             const inputs = [numEmployeesInput, percentFrontlineInput, employeeTurnoverRateInput, avgAnnualWageInput, estimateSlider];
             inputs.forEach(input => input.addEventListener('input', calculateROI));
 
-            calculateROI();
+            if (shareResultsBtn) {
+                shareResultsBtn.addEventListener('click', function() {
+                    window.print();
+                });
+            }
+
+            calculateROI(); // Initial calculation on page load
         });
     </script>
 
-
-
-            <script></script>
-        
-    
 </body>
+</html>
