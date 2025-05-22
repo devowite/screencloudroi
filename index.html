@@ -32,7 +32,7 @@
             padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Changed from center to flex-start for potentially taller content */
+            align-items: flex-start;
             min-height: 100vh;
             overflow-y: auto;
         }
@@ -43,18 +43,18 @@
             border-radius: 12px;
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
             width: 100%;
-            max-width: 1150px; /* Increased for side-by-side layout */
+            max-width: 1150px; 
             margin-top: 20px;
             margin-bottom: 20px;
-            position: relative; /* For logo positioning */
+            position: relative; 
         }
 
 
 .sc-logo img {
-    display: block; /* Removes any potential extra space below the image */
-    width: 100%;   /* Makes the image fill the width of the <a> tag */
-    height: auto;  /* Maintains the image's aspect ratio */
-    border: none;  /* Ensures no border (replaces border="0") */
+    display: block; 
+    width: 100%;   
+    height: auto; 
+    border: none;  
 }
 
         h1 {
@@ -62,8 +62,8 @@
             text-align: center;
             font-size: 2.2em;
             line-height: 1.2;
-            margin-bottom: 30px; /* Increased margin after title block */
-            margin-top: 5px; /* Adjusted slightly if logo takes vertical space, check alignment */
+            margin-bottom: 30px; 
+            margin-top: 5px; 
             font-weight: 700;
         }
 
@@ -80,35 +80,35 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            gap: 40px; /* Space between input and output columns */
+            gap: 40px; 
         }
 
         .input-section, .output-section {
-            flex: 1; /* Each section will take up equal available space */
-            min-width: 0; /* Important for flex items to shrink properly */
-            margin-bottom: 0; /* Removed bottom margin from individual sections */
+            flex: 1; 
+            min-width: 0; 
+            margin-bottom: 0; 
         }
 
         .input-section > h2:first-child,
         .output-section > h2:first-child {
-            margin-top: 0; /* Remove top margin if h2 is first child of section */
+            margin-top: 0; 
         }
 
 
-        h2 { /* General h2 styling, specific overrides above */
+        h2 { 
             color: var(--brand-yellow);
             text-align: center;
             font-size: 1.5em;
             border-bottom: 1px solid var(--input-border);
             padding-bottom: 12px;
-            margin-top: 35px; /* Default top margin, overridden if first child */
+            margin-top: 35px; 
             margin-bottom: 25px;
             font-weight: 600;
         }
 
 
         .form-group {
-            margin-bottom: 20px; /* Slightly reduced for compactness */
+            margin-bottom: 20px; 
             display: flex;
             text-align: center;
             flex-direction: column;
@@ -154,7 +154,7 @@
         }
 
         .slider-wrapper {
-            margin-bottom: 20px; /* Slightly reduced */
+            margin-bottom: 20px;
         }
 
         .slider-main-label {
@@ -344,11 +344,11 @@
         }
 
         .lock-in-link-container {
-            display: flex; /* For aligning buttons */
-            gap: 10px; /* Space between buttons */
-            align-items: center; /* Vertical alignment */
-            flex-wrap: wrap; /* Allow wrapping on small screens */
-            margin-top: 15px; /* Adjusted from inline style */
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            margin-top: 15px; 
         }
 
         .lock-in-benefits-link {
@@ -389,39 +389,36 @@
 
         .share-results-button:hover,
         .share-results-button:focus {
-            background-color: rgba(255, 209, 0, 0.1); /* Slight yellow tint on hover */
+            background-color: rgba(255, 209, 0, 0.1); 
             color: var(--brand-yellow);
             text-decoration: none;
             transform: translateY(-1px);
             outline: none;
         }
         .header-group {
-    display: flex;         /* Aligns logo and H1 in a row */
-    align-items: center;   /* Vertically centers logo and H1 with each other */
-    width: fit-content;    /* Makes the group only as wide as its content */
-    margin-left: auto;     /* Centers the group */
-    margin-right: auto;    /* Centers the group */
-    margin-bottom: 30px;   /* Spacing below the header (from original H1) */
-    /* If you had a specific margin-top on H1 you want to preserve for the group, add it here */
-    /* e.g., margin-top: 5px; */
+    display: flex;        
+    align-items: center;  
+    width: fit-content;   
+    margin-left: auto;     
+    margin-right: auto;    
+    margin-bottom: 30px;   
 }
 
 .header-logo {
-    width: 50px;           /* Adjust size as needed - this is smaller */
+    width: 50px;           
     height: auto;
-    margin-right: 15px;    /* Space between logo and the title text */
+    margin-right: 15px;   
     display: block;
 }
 
-/* Adjust H1 when it's inside the new header-group */
+
 .header-group > h1 {
-    text-align: left;      /* Title/subtitle text now aligns to the left (next to logo) */
-    margin: 0;             /* Remove H1's default margins for better flex control */
-    /* Font size, color, weight, line-height will be inherited from general h1 styles */
+    text-align: left;     
+    margin: 0;             
 }
 
 
-        /* Responsive stacking for smaller screens */
+        
         @media (max-width: 992px) {
             .calculator-content-wrapper {
                 flex-direction: column;
@@ -446,7 +443,7 @@
                  max-width: 100%;
             }
              h1 {
-                 margin-top: 45px; /* Give more space for logo when title might wrap */
+                 margin-top: 45px; 
              }
         }
          @media (max-width: 480px) {
@@ -455,14 +452,14 @@
              }
              h1 {
                 font-size: 1.8em;
-                margin-top: 30px; /* More space for logo */
+                margin-top: 30px; 
              }
              h1 .subtitle { font-size: 0.6em; }
              h2 { font-size: 1.3em; }
              .output-metric span { font-size: 1.3em; }
              .output-metric.total-benefit span { font-size: 1.5em; }
              .lock-in-link-container {
-                 justify-content: center; /* Center buttons on small screens if they wrap */
+                 justify-content: center; 
              }
          }
 
@@ -475,15 +472,15 @@
     }
     .roi-calculator {
         box-shadow: none !important;
-        border: 1px solid #ccc !important; /* You can set to 'none' if no border is preferred */
+        border: 1px solid #ccc !important; 
         margin: 20px !important;
         padding: 15px !important;
         max-width: 100% !important;
         width: auto !important;
     }
 
-    /* Hide these elements in print view */
-    .input-section, /* <<< HIDES THE ENTIRE INPUTS SECTION */
+   
+    .input-section,
     .lock-in-benefits-link,
     .share-results-button,
     .slider-wrapper,
@@ -492,44 +489,42 @@
         display: none !important;
     }
 
-    /* Outputs header adjustments for print */
+
     .screen-only-outputs-header {
-        display: none !important; /* Hide the original "Outputs" H2 */
+        display: none !important; 
     }
     .print-only-outputs-header {
-        display: block !important; /* Show the "Our ROI" H2 */
-        margin-top: 0 !important; /* Ensure it aligns like the first H2 in the section */
-        /* It will inherit other H2 styles (color, font-size, border, etc.)
-           but you can override them here if needed for print. */
+        display: block !important; 
+        margin-top: 0 !important; 
     }
 
-    /* Text color adjustments for readability in print */
-    h1, /* This H1 (main title) will be hidden if .header-group is hidden. Keeping for safety */
-    h2, /* This will style the visible "Our ROI" header */
+  
+    h1, 
+    h2, 
     .output-metric p,
     .output-metric span,
-    .form-group label, /* Labels in input-section will be hidden with the section */
-    #slider-value-display { /* slider-value-display is part of .slider-wrapper, will be hidden */
+    .form-group label, 
+    #slider-value-display { 
         color: #333 !important;
     }
 
-    .print-only-outputs-header { /* Specifically style the "Our ROI" header if needed */
-        color: var(--brand-yellow) !important; /* Keep brand color for this header */
+    .print-only-outputs-header {
+        color: var(--brand-yellow) !important; 
     }
 
-    h1 .subtitle { /* Subtitle of main H1 will be hidden if .header-group is hidden */
+    h1 .subtitle { 
             color: #555 !important;
     }
     .output-metric.total-benefit span {
-            color: var(--brand-yellow) !important; /* Keep brand color for total benefit */
+            color: var(--brand-yellow) !important; 
     }
 
-    /* Backgrounds and borders for print */
+   
     .output-metric {
         background-color: #f9f9f9 !important;
         border-left-color: var(--brand-yellow) !important;
     }
-    .form-group input[type="number"] { /* Inputs will be hidden with .input-section */
+    .form-group input[type="number"] { 
         background-color: #fff !important;
         border: 1px solid #bbb !important;
         color: #000 !important;
@@ -687,12 +682,12 @@
                 const avgAnnualWage = parseFloat(avgAnnualWageInput.value) || 0;
                 const sliderVal = parseFloat(estimateSlider.value) || 0;
 
-                const minTotalReductionPerc = 0.05; // 5%
-                const maxTotalReductionPerc = 0.24; // 24%
+                const minTotalReductionPerc = 0.05; 
+                const maxTotalReductionPerc = 0.24; 
                 const sliderMin = -12.5;
                 const sliderMax = 12.5;
 
-                const sliderNormalized = (sliderMax - sliderMin === 0) ? 0 : (sliderVal - sliderMin) / (sliderMax - sliderMin); // Avoid division by zero
+                const sliderNormalized = (sliderMax - sliderMin === 0) ? 0 : (sliderVal - sliderMin) / (sliderMax - sliderMin); 
                 const currentTotalTurnoverReductionPercentage = minTotalReductionPerc + sliderNormalized * (maxTotalReductionPerc - minTotalReductionPerc);
 
                 const reductionInPP = originalTurnoverRateInputVal * currentTotalTurnoverReductionPercentage;
@@ -707,7 +702,6 @@
                 const turnoverReductionSavings = employeesRetainedAnnually * replacementCostPerEmployee;
 
                 const generalSliderAdjustmentFactor = 1 + (sliderVal / 100);
-                // Using 31 minutes and 265 days as per your provided code for this iteration
                 const totalMinutesSavedPerEmployeeYear = 31 * 265;
                 const totalMinutesSavedAllFrontlineYearBase = totalMinutesSavedPerEmployeeYear * frontlineEmployeesCount;
                 const annualWorkHours = 265 * 8;
@@ -720,7 +714,7 @@
 
                 outputNewTurnoverRate.textContent = formatPercentage(displayedNewTurnoverRate);
 
-                if (originalTurnoverRateInputVal > 0 && reductionInPP > 0.0001) { // Check if there's a meaningful reduction
+                if (originalTurnoverRateInputVal > 0 && reductionInPP > 0.0001) { 
                     turnoverPercentageDeclineEl.textContent = formatPercentage(currentTotalTurnoverReductionPercentage * 100, 1) + " improvement";
                     turnoverReductionDetailContainer.style.display = 'flex';
                 } else {
@@ -743,7 +737,7 @@
                 });
             }
 
-            calculateROI(); // Initial calculation on page load
+            calculateROI(); 
         });
     </script>
 
