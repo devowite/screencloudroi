@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScreenCloud ROI Calculator V7.5</title> <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>ScreenCloud ROI Calculator V7.6</title> <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -24,7 +24,8 @@
         .roi-calculator-container { width: 100%; max-width: 1150px; margin-top: 20px; margin-bottom: 20px; }
         .value-area-selector { background-color: var(--brand-medium-dark); padding: 30px 35px; border-radius: 12px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4); margin-bottom: 30px; }
         .value-area-selector h1 { color: var(--brand-yellow); text-align: center; font-size: 2em; margin-bottom: 15px; font-weight: 700; }
-        .value-area-selector p { text-align: center; color: var(--text-secondary); margin-bottom: 25px; font-size: 0.95em; }
+        .value-area-selector p { text-align: center; color: var(--text-secondary); margin-bottom: 15px; font-size: 0.95em; } /* Reduced margin for toggle */
+        .toggle-all-container { text-align: right; margin-bottom: 15px; }
         .value-options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .value-option { background-color: var(--input-bg); padding: 18px 20px; border-radius: 8px; border: 1px solid var(--input-border); cursor: pointer; transition: background-color 0.3s ease, border-color 0.3s ease; display: flex; align-items: center; }
         .value-option:hover { background-color: #3a3a3a; }
@@ -77,7 +78,7 @@
         input[type="range"] { -webkit-appearance: none; appearance: none; flex-grow: 1; height: 10px; background: var(--slider-track); border-radius: 5px; outline: none; margin: 0 15px; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; background: var(--slider-thumb); border-radius: 50%; cursor: pointer; border: 3px solid var(--brand-medium-dark); box-shadow: 0 0 5px rgba(0,0,0,0.3); }
         input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; background: var(--slider-thumb); border-radius: 50%; cursor: pointer; border: 3px solid var(--brand-medium-dark); box-shadow: 0 0 5px rgba(0,0,0,0.3); }
-        #slider-value-display { text-align: center; color: var(--brand-yellow); font-weight: bold; font-size: 0.9em; min-height: 1.2em; margin-top: 10px; }
+        /* #slider-value-display REMOVED */
         .output-metric { background-color: var(--input-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid var(--brand-yellow); transition: transform 0.2s ease-out; }
         .output-metric:hover { transform: translateY(-2px); }
         .output-metric p { margin: 0; font-size: 0.85em; color: var(--text-secondary); margin-bottom: 5px; }
@@ -140,6 +141,9 @@
         <div class="value-area-selector" id="valueAreaSelector">
             <h1>Select Your Key Value Areas</h1>
             <p>Choose at least two areas where you see the most potential for improvement with ScreenCloud.</p>
+            <div class="toggle-all-container">
+                <button type="button" id="toggleAllValueAreasButton" class="secondary-button" style="font-size: 0.8em; padding: 6px 12px;">Select All</button>
+            </div>
             <div class="value-options-grid" id="valueOptionsGrid">
                 <div class="value-option" data-value="content_engagement"><input type="checkbox" id="chkContentEngagement" name="value_areas" value="content_engagement"><label for="chkContentEngagement"><span class="emoji">📊</span>Content Engagement</label></div>
                 <div class="value-option" data-value="employee_satisfaction"><input type="checkbox" id="chkEmployeeSatisfaction" name="value_areas" value="employee_satisfaction"><label for="chkEmployeeSatisfaction"><span class="emoji">😊</span>Employee Satisfaction & Retention</label></div>
@@ -170,8 +174,7 @@
                             <input type="range" id="estimateSlider" min="-12.5" max="12.5" step="0.1" value="0">
                             <span class="slider-end-labels aggressive">Aggressive</span>
                         </div>
-                        <div id="slider-value-display">Neutral Impact</div>
-                    </div>
+                        </div>
                     <div class="output-metric total-benefit">
                         <p>Total Estimated Annual Benefit</p>
                         <span id="outputTotalAnnualBenefit">$0</span>
@@ -198,7 +201,10 @@
         const outputTotalAnnualBenefit = document.getElementById('outputTotalAnnualBenefit');
         const shareResultsBtn = document.getElementById('shareResultsBtn');
         const estimateSlider = document.getElementById('estimateSlider');
-        const sliderValueDisplay = document.getElementById('slider-value-display');
+        // const sliderValueDisplay = document.getElementById('slider-value-display'); // REMOVED
+
+        const toggleAllValueAreasButton = document.getElementById('toggleAllValueAreasButton'); // Added
+        let isSelectAllActive = false; // Added for toggle state
 
         const VALUE_AREAS = {
             content_engagement: {
@@ -237,8 +243,6 @@
                 calculate: function(inputs) { 
                     const baseTurnoverRatePercent = parseFloat(inputs.currentEmployeeTurnoverRate) || 0;
                     const baseTurnoverRateDecimal = baseTurnoverRatePercent / 100;
-                    // No longer calculates neutralTurnoverRateReductionDecimal_Points here
-                    // This will be fully handled in calculateROI based on new slider logic
                     return {
                         baseTurnoverRateDecimal: baseTurnoverRateDecimal,
                         numEmployees: parseFloat(inputs.numEmployees) || 0,
@@ -324,16 +328,60 @@
         };
 
         let selectedValueAreas = []; const allInputReferences = {}; 
-        valueOptionsGrid.addEventListener('click', function(event) { const optionDiv = event.target.closest('.value-option'); if (optionDiv) { const checkbox = optionDiv.querySelector('input[type="checkbox"]'); if (event.target.tagName !== 'INPUT') { checkbox.checked = !checkbox.checked; } optionDiv.classList.toggle('selected', checkbox.checked); updateSelectionState(); } });
-        function updateSelectionState() { const checkedBoxes = Array.from(valueOptionsGrid.querySelectorAll('input[type="checkbox"]:checked')); selectedValueAreas = checkedBoxes.map(cb => cb.value); if (selectedValueAreas.length >= 2) { selectionNextButton.disabled = false; errorMessage.textContent = ''; } else { selectionNextButton.disabled = true; errorMessage.textContent = 'Please select at least 2 value areas.'; } }
+
+        // --- Select/Unselect All Logic ---
+        toggleAllValueAreasButton.addEventListener('click', function() {
+            isSelectAllActive = !isSelectAllActive; // Toggle the desired state
+            const checkboxes = valueOptionsGrid.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = isSelectAllActive;
+                const optionDiv = checkbox.closest('.value-option');
+                if (optionDiv) {
+                    optionDiv.classList.toggle('selected', isSelectAllActive);
+                }
+            });
+            this.textContent = isSelectAllActive ? 'Unselect All' : 'Select All';
+            updateSelectionState(); 
+        });
+
+        valueOptionsGrid.addEventListener('click', function(event) { 
+            const optionDiv = event.target.closest('.value-option'); 
+            if (optionDiv) { 
+                const checkbox = optionDiv.querySelector('input[type="checkbox"]'); 
+                if (event.target.tagName !== 'INPUT') { checkbox.checked = !checkbox.checked; } 
+                optionDiv.classList.toggle('selected', checkbox.checked); 
+                updateSelectionState(); // Call this first
+
+                // Sync toggleAll button
+                const allCheckboxes = Array.from(valueOptionsGrid.querySelectorAll('input[type="checkbox"]'));
+                const allCurrentlySelected = allCheckboxes.every(cb => cb.checked);
+                if (allCurrentlySelected) {
+                    toggleAllValueAreasButton.textContent = 'Unselect All';
+                    isSelectAllActive = true;
+                } else {
+                    toggleAllValueAreasButton.textContent = 'Select All';
+                    isSelectAllActive = false; 
+                }
+            } 
+        });
+        
+        function updateSelectionState() { 
+            const checkedBoxes = Array.from(valueOptionsGrid.querySelectorAll('input[type="checkbox"]:checked')); 
+            selectedValueAreas = checkedBoxes.map(cb => cb.value); 
+            if (selectedValueAreas.length >= 2) { 
+                selectionNextButton.disabled = false; errorMessage.textContent = ''; 
+            } else { 
+                selectionNextButton.disabled = true; errorMessage.textContent = 'Please select at least 2 value areas.'; 
+            } 
+        }
         selectionNextButton.addEventListener('click', function() { if (selectedValueAreas.length >= 2) { localStorage.setItem('selectedRoiValueAreas', JSON.stringify(selectedValueAreas)); valueAreaSelector.style.display = 'none'; roiCalculatorMain.style.display = 'block'; populateCalculator(); calculateROI(); } });
         backToSelectionButton.addEventListener('click', function() { roiCalculatorMain.style.display = 'none'; valueAreaSelector.style.display = 'block'; updateSelectionState(); });
         function formatCurrency(value) { return value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
         function formatPercentage(value, decimalPlaces = 1) { const numValue = Number(value); if (isNaN(numValue)) return '0.0%'; return numValue.toFixed(decimalPlaces) + '%'; }
         function createInputElement(config) { const formGroup = document.createElement('div'); formGroup.className = 'form-group'; const label = document.createElement('label'); const labelTextWrapper = document.createElement('span'); labelTextWrapper.className = 'label-text-wrapper'; const labelTextNode = document.createTextNode(config.label); labelTextWrapper.appendChild(labelTextNode); if (config.tooltip) { const infoWrapper = document.createElement('span'); infoWrapper.className = 'info-icon-wrapper'; const infoIcon = document.createElement('span'); infoIcon.className = 'info-icon'; infoIcon.textContent = '?'; const tooltipText = document.createElement('span'); tooltipText.className = 'tooltip-text'; tooltipText.textContent = config.tooltip; infoWrapper.appendChild(infoIcon); infoWrapper.appendChild(tooltipText); labelTextWrapper.appendChild(infoWrapper); } label.setAttribute('for', config.id); label.appendChild(labelTextWrapper); const input = document.createElement('input'); input.type = config.type; input.id = config.id; input.value = config.value; if (config.min !== undefined) input.min = config.min; if (config.max !== undefined) input.max = config.max; if (config.step !== undefined) input.step = config.step; allInputReferences[config.id] = input; input.addEventListener('input', calculateROI); formGroup.appendChild(label); formGroup.appendChild(input); return formGroup; }
         function createOutputMetric(config, value) { const metricDiv = document.createElement('div'); metricDiv.className = 'output-metric'; if (config.id === 'outputTotalAnnualBenefit') metricDiv.classList.add('total-benefit'); const p = document.createElement('p'); p.textContent = config.label; const span = document.createElement('span'); span.id = config.id; span.textContent = value; metricDiv.appendChild(p); metricDiv.appendChild(span); if (config.hasReductionDetail || config.hasImprovementDetail) { const detailContainer = document.createElement('div'); detailContainer.className = 'metric-detail ' + (config.hasReductionDetail ? 'reduction' : 'improvement'); detailContainer.id = `metricDetailContainer_${config.id}`; detailContainer.style.display = 'none'; const arrow = document.createElement('span'); arrow.className = 'arrow'; arrow.innerHTML = config.hasReductionDetail ? '↓' : '↑'; const text = document.createElement('span'); text.id = `metricDetailText_${config.id}`; detailContainer.appendChild(arrow); detailContainer.appendChild(text); metricDiv.appendChild(detailContainer); } if (config.hasVideoLink) { const videoContainer = document.createElement('div'); videoContainer.className = 'video-link-container'; const link = document.createElement('a'); link.href = "https://youtu.be/rQRnibgEyOs?feature=shared"; link.target = "_blank"; link.rel = "noopener noreferrer"; link.className = "video-testimonial-link"; link.innerHTML = `<svg viewBox="0 0 24 24" width="16px" height="16px"><path d="M8 5v14l11-7z"></path></svg> Watch Testimonial`; videoContainer.appendChild(link); metricDiv.appendChild(videoContainer); } return metricDiv; }
-        function updateSliderImpactDisplay(sliderVal) { let text = ""; const percentageAdjustment = Math.abs( (sliderVal / 12.5) * 20 ).toFixed(0); if (sliderVal > 0.1) { text = ``; } else if (sliderVal < -0.1) { text = ``; } sliderValueDisplay.textContent = text; }
-        estimateSlider.addEventListener('input', function() { updateSliderImpactDisplay(parseFloat(this.value)); calculateROI(); });
+        
+        estimateSlider.addEventListener('input', calculateROI); // Removed updateSliderImpactDisplay call
 
         function populateCalculator() {
             inputSection.innerHTML = ''; 
@@ -386,12 +434,12 @@
                  sliderWrapper.style.display = 'none';
             }
             if (!hasInputs && inputsTitle.parentNode === inputSection) { inputSection.removeChild(inputsTitle); }
-            updateSliderImpactDisplay(parseFloat(estimateSlider.value));
+            // updateSliderImpactDisplay(parseFloat(estimateSlider.value)); // REMOVED
         }
 
         function calculateROI() {
             const sliderVal = parseFloat(estimateSlider.value) || 0;
-            const sliderNormalized = sliderVal / 12.5; // Range -1 to +1
+            const sliderNormalized = sliderVal / 12.5; 
 
             const factorFor20PercentOutputs = 1 + (sliderNormalized * 0.20);
             const enpsActualImprovement = 20 + (sliderNormalized * 5); 
@@ -427,38 +475,41 @@
                             break;
                         case 'employee_satisfaction':
                             if (outputConf.id === 'outputNewTurnoverRate') {
-                                // ** UPDATED TURNOVER RATE LOGIC **
                                 let targetReductionFactorOfOriginalRate;
-                                const neutralReduction = 0.125; // 12.5% reduction of original turnover rate
-                                const aggressiveReduction = 0.24; // 24% reduction of original turnover rate
-                                const conservativeReduction = 0.05; // 5% reduction of original turnover rate
+                                const neutralReduction = 0.125; 
+                                const aggressiveReduction = 0.24; 
+                                const conservativeReduction = 0.05; 
 
-                                if (sliderNormalized >= 0) { // Neutral to Aggressive
+                                if (sliderNormalized >= 0) { 
                                     targetReductionFactorOfOriginalRate = neutralReduction + sliderNormalized * (aggressiveReduction - neutralReduction);
-                                } else { // Neutral to Conservative (sliderNormalized is negative)
+                                } else { 
                                     targetReductionFactorOfOriginalRate = neutralReduction + sliderNormalized * (neutralReduction - conservativeReduction);
                                 }
-                                // Clamp the factor to ensure it stays within the defined 5%-24% range
                                 targetReductionFactorOfOriginalRate = Math.max(conservativeReduction, Math.min(aggressiveReduction, targetReductionFactorOfOriginalRate));
                                 
                                 const reductionInPercentagePoints = baseResults.baseTurnoverRateDecimal * targetReductionFactorOfOriginalRate;
                                 const finalNewTurnoverRateDecimal = baseResults.baseTurnoverRateDecimal - reductionInPercentagePoints;
                                 value = Math.max(0, finalNewTurnoverRateDecimal * 100); 
-                                // ** END OF UPDATED TURNOVER RATE LOGIC **
 
                                 originalValueForDetail = baseResults.baseTurnoverRateDecimal * 100;
                                 improvementAmountForDetail = reductionInPercentagePoints * 100; 
                                 finalValueForDetail = value;
 
                             } else if (outputConf.id === 'outputTurnoverReductionSavings') {
-                                // This must use the 'value' just calculated for outputNewTurnoverRate
                                 let newTurnoverRateForSavingsCalc = 0;
                                 const newTurnoverRateOutputVal = document.getElementById('outputNewTurnoverRate');
                                 if (newTurnoverRateOutputVal && newTurnoverRateOutputVal.textContent) {
-                                    newTurnoverRateForSavingsCalc = parseFloat(newTurnoverRateOutputVal.textContent.replace('%', '')) / 100.0;
+                                     newTurnoverRateForSavingsCalc = parseFloat(newTurnoverRateOutputVal.textContent.replace('%', '')) / 100.0;
+                                } else { 
+                                    let tempTargetReductionFactor;
+                                    const neutralR = 0.125, aggressiveR = 0.24, conservativeR = 0.05;
+                                    if (sliderNormalized >= 0) { tempTargetReductionFactor = neutralR + sliderNormalized * (aggressiveR - neutralR); } 
+                                    else { tempTargetReductionFactor = neutralR + sliderNormalized * (neutralR - conservativeR); }
+                                    tempTargetReductionFactor = Math.max(conservativeR, Math.min(aggressiveR, tempTargetReductionFactor));
+                                    const tempReductionPP = baseResults.baseTurnoverRateDecimal * tempTargetReductionFactor;
+                                    newTurnoverRateForSavingsCalc = Math.max(0, baseResults.baseTurnoverRateDecimal - tempReductionPP);
                                 }
-                                // If newTurnoverRateForSavingsCalc is still 0 (e.g. element not found or empty), savings will be 0.
-                                
+                               
                                 const tempEmployeesRetained = Math.max(0, (baseResults.baseTurnoverRateDecimal - newTurnoverRateForSavingsCalc) * baseResults.numEmployees);
                                 value = tempEmployeesRetained * (baseResults.avgAnnualWage * 0.4);
                             } else if (outputConf.id === 'outputNewEnps') {
@@ -476,9 +527,8 @@
                             break;
                         case 'employee_productivity': value = baseResults.outputProductivityValueBaseline * factorFor20PercentOutputs; break;
                         default: 
-                            if(baseResults && baseResults[outputConf.id] !== undefined) {
-                                value = baseResults[outputConf.id];
-                            } else { value = 0; }
+                            if(baseResults && baseResults[outputConf.id] !== undefined) { value = baseResults[outputConf.id]; } 
+                            else { value = 0; }
                             break; 
                     }
 
@@ -495,18 +545,17 @@
                     if (detailContainer && detailTextEl) {
                         let showDetail = false; let detailText = '';
                         if (outputConf.id === 'outputNewTurnoverRate') {
-                            // improvementAmountForDetail for turnover is the reduction in percentage points
                             if (originalValueForDetail > 0 && Math.abs(improvementAmountForDetail) > 0.001) { 
-                                detailText = `${formatPercentage(improvementAmountForDetail, 1)} decline (from ${formatPercentage(originalValueForDetail,1)} to ${formatPercentage(finalValueForDetail,1)})`;
+                                detailText = `${formatPercentage(improvementAmountForDetail, 1)} pp decline (from ${formatPercentage(originalValueForDetail,1)} to ${formatPercentage(finalValueForDetail,1)})`;
                                 showDetail = true;
                             }
                         } else if (outputConf.id === 'outputNewEngagementRate') {
                             if (Math.abs(improvementAmountForDetail) > 0.001) {
-                                detailText = `${formatPercentage(improvementAmountForDetail, 1)} increase (from ${formatPercentage(originalValueForDetail,1)} to ${formatPercentage(finalValueForDetail,1)})`;
+                                detailText = `${formatPercentage(improvementAmountForDetail, 1)} pp uplift (from ${formatPercentage(originalValueForDetail,1)} to ${formatPercentage(finalValueForDetail,1)})`;
                                 showDetail = true;
                             }
                         } else if (outputConf.id === 'outputNewEnps') {
-                             if (Math.abs(improvementAmountForDetail) >= 1) { 
+                             if (Math.abs(improvementAmountForDetail) >= 0.001) { // Check if there's any change from neutral for eNPS detail
                                 detailText = `${Math.round(improvementAmountForDetail)} points improvement (from ${Math.round(originalValueForDetail)} to ${Math.round(finalValueForDetail)})`;
                                 showDetail = true;
                             }
@@ -526,7 +575,11 @@
             selectedValueAreas = JSON.parse(storedSelections);
             selectedValueAreas.forEach(valKey => { const checkboxId = `chk${valKey.charAt(0).toUpperCase() + valKey.slice(1).replace(/_([a-z])/g, g => g[1].toUpperCase())}`; const checkbox = document.getElementById(checkboxId); if(checkbox) { checkbox.checked = true; const optionDiv = checkbox.closest('.value-option'); if(optionDiv) optionDiv.classList.add('selected'); } });
         }
-        updateSelectionState(); updateSliderImpactDisplay(parseFloat(estimateSlider.value));
+        updateSelectionState(); 
+        // updateSliderImpactDisplay(parseFloat(estimateSlider.value)); // REMOVED
+        // Initialize slider text manually if needed, or remove if no text display is desired
+        // For now, if #slider-value-display is removed from HTML, this call is not needed.
+
     });
     </script>
 </body>
